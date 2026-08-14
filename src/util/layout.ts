@@ -30,8 +30,18 @@ export function renderShell(container: HTMLElement, active: RouteName, content: 
 
   const header = h("header", { class: "app-header" }, [
     h("h1", { class: "app-logo" }, [
-      h("span", { class: "logo-mark", html: CROSS_MARK_SVG }),
-      "Rosary",
+      h(
+        "a",
+        {
+          href: "#/home",
+          class: "app-logo-link",
+          onclick: (e: Event) => {
+            e.preventDefault();
+            navigate("home");
+          },
+        },
+        [h("span", { class: "logo-mark", html: CROSS_MARK_SVG }), "Rosary"],
+      ),
     ]),
     nav,
   ]);
