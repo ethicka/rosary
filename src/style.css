@@ -1,51 +1,51 @@
-/* ---------- Design tokens ---------- */
+/* ---------- Design tokens (Marian blue) ---------- */
 :root {
   --font-scale: 1;
-  --bg: #faf7f2;
+  --bg: #f4f7fc;
   --bg-elevated: #ffffff;
-  --text: #1c1a17;
-  --text-muted: #55504a;
-  --accent: #6b3f2a;
+  --text: #131c2e;
+  --text-muted: #4d5972;
+  --accent: #1e3f78;
   --accent-contrast: #ffffff;
-  --border: #ddd4c7;
-  --focus-ring: #1a5fb4;
-  --danger: #8a1f11;
-  --shadow: 0 1px 3px rgba(28, 26, 23, 0.08), 0 1px 2px rgba(28, 26, 23, 0.06);
+  --border: #d7e0ee;
+  --focus-ring: #2a63c9;
+  --danger: #ae2c1e;
+  --shadow: 0 1px 3px rgba(19, 28, 46, 0.08), 0 1px 2px rgba(19, 28, 46, 0.06);
   --radius: 12px;
-  --leader-bg: #f1e6d8;
-  --all-bg: #e7eef0;
+  --leader-bg: #e7eefc;
+  --all-bg: #f1ecfa;
 }
 
 :root:not([data-theme="light"]) {
   @media (prefers-color-scheme: dark) {
-    --bg: #17140f;
-    --bg-elevated: #221e18;
-    --text: #f3efe7;
-    --text-muted: #c7bfb2;
-    --accent: #d8a978;
-    --accent-contrast: #1c1006;
-    --border: #3c352a;
-    --focus-ring: #7cb0f0;
-    --danger: #e5897a;
+    --bg: #0c1524;
+    --bg-elevated: #142238;
+    --text: #eef2fb;
+    --text-muted: #aebbd6;
+    --accent: #7fa8e8;
+    --accent-contrast: #0b1526;
+    --border: #28395a;
+    --focus-ring: #8fb8f5;
+    --danger: #f2897a;
     --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-    --leader-bg: #332a1d;
-    --all-bg: #1c2a2d;
+    --leader-bg: #1b2a46;
+    --all-bg: #241f3d;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #17140f;
-  --bg-elevated: #221e18;
-  --text: #f3efe7;
-  --text-muted: #c7bfb2;
-  --accent: #d8a978;
-  --accent-contrast: #1c1006;
-  --border: #3c352a;
-  --focus-ring: #7cb0f0;
-  --danger: #e5897a;
+  --bg: #0c1524;
+  --bg-elevated: #142238;
+  --text: #eef2fb;
+  --text-muted: #aebbd6;
+  --accent: #7fa8e8;
+  --accent-contrast: #0b1526;
+  --border: #28395a;
+  --focus-ring: #8fb8f5;
+  --danger: #f2897a;
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-  --leader-bg: #332a1d;
-  --all-bg: #1c2a2d;
+  --leader-bg: #1b2a46;
+  --all-bg: #241f3d;
 }
 
 * {
@@ -207,6 +207,43 @@ kbd {
   letter-spacing: 0.02em;
 }
 
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.logo-mark {
+  display: inline-flex;
+  color: var(--accent);
+  font-size: 1.35rem;
+}
+
+.app-footer {
+  border-top: 1px solid var(--border);
+  margin-top: 2.5rem;
+  padding: 1.5rem 1.25rem 2rem;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.app-footer p {
+  margin: 0 0 0.5em;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.app-footer a {
+  color: var(--text-muted);
+  text-decoration: underline;
+}
+
+.app-footer a:hover {
+  color: var(--accent);
+}
+
 .app-nav {
   display: flex;
   gap: 0.4rem;
@@ -245,25 +282,64 @@ main {
 }
 
 /* ---------- Home screen ---------- */
+.home-hero {
+  text-align: center;
+  padding: 0.5rem 0 0.25rem;
+}
+
+.hero-date {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
 .today-card {
   background: var(--bg-elevated);
   border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
   border-radius: var(--radius);
-  padding: 1.25rem;
-  margin: 1rem 0;
+  padding: 1.75rem 1.5rem;
+  margin: 1.25rem 0 1rem;
   box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.today-card .eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: 0.78rem;
+  color: var(--text-muted);
 }
 
 .today-card .set-name {
-  font-size: 1.5rem;
-  margin: 0.15em 0;
+  font-size: 2.1rem;
+  margin: 0.3em 0 0.25em;
+  color: var(--accent);
+}
+
+.today-card .set-tagline {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.picker-label {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 .set-picker {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.5rem;
-  margin: 0.75rem 0 1.25rem;
+  margin: 0 0 1.5rem;
+}
+
+.set-picker button {
+  border-radius: 999px;
+  padding: 0.5em 1.1em;
 }
 
 .set-picker button[aria-pressed="true"] {
@@ -289,25 +365,42 @@ main {
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
+  justify-content: center;
   margin: 1rem 0;
+}
+
+.start-button {
+  font-size: 1.1rem;
+  padding: 0.85em 2.5em;
 }
 
 .link-list {
   list-style: none;
   padding: 0;
-  margin: 1.5rem 0 0;
+  margin: 2rem 0 0;
   display: grid;
   gap: 0.6rem;
 }
 
 .link-list a {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   text-decoration: none;
   color: var(--text);
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 0.85rem 1rem;
+  padding: 0.85rem 1.1rem;
+  transition: border-color 0.15s ease;
+}
+
+.link-list a:hover {
+  border-color: var(--accent);
+}
+
+.link-list .chevron {
+  color: var(--text-muted);
 }
 
 /* ---------- Prayer step screen ---------- */
@@ -459,15 +552,26 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
   padding: 2rem 1.5rem 3rem;
-  gap: 1.25rem;
   max-width: 760px;
   margin: 0 auto;
   width: 100%;
   overflow-y: auto;
   cursor: pointer;
+}
+
+/* Vertically centers short content, but — unlike `justify-content: center`
+   on the scrolling parent — never clips the top of content that's taller
+   than the viewport (e.g. the Apostles' Creed): auto margins simply
+   resolve to 0 once there's no free space to distribute. */
+.pray-main-inner {
+  margin-top: auto;
+  margin-bottom: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
 }
 
 .repeat-count {
@@ -626,5 +730,46 @@ main {
 .mystery-entry .scripture-text {
   font-style: italic;
   margin: 0.5rem 0;
+}
+
+/* ---------- Modal ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgba(10, 16, 30, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.modal-dialog {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(10, 16, 30, 0.35);
+  padding: 1.5rem;
+  max-width: 28rem;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal-dialog:focus-visible {
+  outline: none;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
 }
 

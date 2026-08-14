@@ -2,7 +2,7 @@ import { h } from "../util/dom.ts";
 import { renderShell } from "../util/layout.ts";
 import { navigate } from "../util/router.ts";
 import { getDefaultMysterySet } from "../data/liturgical.ts";
-import { MYSTERY_SETS, type MysterySetName } from "../data/mysteries.ts";
+import { MYSTERY_SETS, MYSTERY_SET_TAGLINE, type MysterySetName } from "../data/mysteries.ts";
 import { loadSettings } from "../state/settings.ts";
 import { loadSession, saveSession, clearSession } from "../state/session.ts";
 import { buildBeadSequence, describeProgress } from "../state/beadSequence.ts";
@@ -26,7 +26,9 @@ export function mountHome(container: HTMLElement): void {
       day: "numeric",
     });
 
-    body.append(h("p", { class: "subtle" }, [dateStr]));
+    body.append(
+      h("div", { class: "home-hero" }, [h("p", { class: "hero-date" }, [dateStr])]),
+    );
 
     const existingSession = loadSession();
     if (existingSession) {
@@ -70,15 +72,15 @@ export function mountHome(container: HTMLElement): void {
       }
     }
 
-    body.append(h("h2", { class: "screen-title" }, ["Today's Mystery"]));
     body.append(
       h("div", { class: "today-card" }, [
-        h("div", { class: "subtle" }, [`Today (${defaultSelection.reason}) is traditionally:`]),
-        h("p", { class: "set-name" }, [`${defaultSelection.set} Mysteries`]),
-        h("p", { class: "subtle" }, ["You can pray a different set below if you'd like."]),
+        h("p", { class: "eyebrow" }, [`Today's Mystery · ${defaultSelection.reason}`]),
+        h("h2", { class: "set-name" }, [`${defaultSelection.set} Mysteries`]),
+        h("p", { class: "set-tagline" }, [MYSTERY_SET_TAGLINE[defaultSelection.set]]),
       ]),
     );
 
+    body.append(h("p", { class: "picker-label subtle" }, ["Or pray a different set:"]));
     body.append(
       h(
         "div",
@@ -104,7 +106,7 @@ export function mountHome(container: HTMLElement): void {
         h(
           "button",
           {
-            class: "primary",
+            class: "primary start-button",
             onclick: () => startRosary(),
           },
           ["Start Rosary"],
@@ -114,8 +116,18 @@ export function mountHome(container: HTMLElement): void {
 
     body.append(
       h("ul", { class: "link-list" }, [
-        h("li", {}, [h("a", { href: "#/mysteries" }, ["Browse all 20 Mysteries"])]),
-        h("li", {}, [h("a", { href: "#/settings" }, ["Settings"])]),
+        h("li", {}, [
+          h("a", { href: "#/mysteries" }, [
+            h("span", {}, ["Browse all 20 Mysteries"]),
+            h("span", { class: "chevron", "aria-hidden": "true" }, ["→"]),
+          ]),
+        ]),
+        h("li", {}, [
+          h("a", { href: "#/settings" }, [
+            h("span", {}, ["Settings"]),
+            h("span", { class: "chevron", "aria-hidden": "true" }, ["→"]),
+          ]),
+        ]),
       ]),
     );
   }
@@ -132,4 +144,3 @@ export function mountHome(container: HTMLElement): void {
     navigate("pray");
   }
 }
-

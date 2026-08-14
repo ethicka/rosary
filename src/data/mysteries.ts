@@ -19,6 +19,13 @@ export const MYSTERY_SETS: MysterySetName[] = [
   "Luminous",
 ];
 
+export const MYSTERY_SET_TAGLINE: Record<MysterySetName, string> = {
+  Joyful: "The Incarnation and hidden life of Christ",
+  Sorrowful: "The Passion and Death of Christ",
+  Glorious: "The Resurrection and glory of Christ",
+  Luminous: "The public ministry of Christ",
+};
+
 export const MYSTERIES: Mystery[] = [
   // Joyful
   {

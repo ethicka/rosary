@@ -6,6 +6,7 @@ import { mountHome } from "./screens/home.ts";
 import { mountPray } from "./screens/pray.ts";
 import { mountSettings } from "./screens/settings.ts";
 import { mountMysteries } from "./screens/mysteries.ts";
+import { initShortcutsModal } from "./util/shortcutsModal.ts";
 
 applyTheme(loadSettings());
 
@@ -14,6 +15,7 @@ registerRoute("pray", mountPray);
 registerRoute("settings", mountSettings);
 registerRoute("mysteries", mountMysteries);
 
+initShortcutsModal();
 startRouter();
 
 if ("serviceWorker" in navigator) {

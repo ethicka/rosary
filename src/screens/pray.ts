@@ -131,22 +131,14 @@ export function mountPray(container: HTMLElement): () => void {
       h("div", { class: "pray-header-spacer" }),
     ]);
 
-    const mainEl = h("div", {
-      class: `pray-main${settings.beadsOnlyMode ? " beads-only" : ""}`,
-      onclick: (e: Event) => {
-        if (e.target instanceof HTMLElement && e.target.closest("button, a")) return;
-        goNext();
-      },
-      ontouchstart: onTouchStart,
-      ontouchend: onTouchEnd,
-    });
+    const innerEl = h("div", { class: "pray-main-inner" });
 
     const showMysteryChip =
       bead.decade >= 1 && bead.decade <= 5 && bead.type !== "mysteryAnnounce" && mystery === undefined;
     if (showMysteryChip) {
       const chipMystery = resolveBead({ ...bead, type: "mysteryAnnounce" }, session.mysterySet).mystery;
       if (chipMystery) {
-        mainEl.append(
+        innerEl.append(
           h("div", { class: "mystery-chip" }, [
             h("strong", {}, [`Decade ${bead.decade}: ${chipMystery.title}`]),
             h("span", {}, [`Fruit: ${chipMystery.fruit}`]),
@@ -156,14 +148,28 @@ export function mountPray(container: HTMLElement): () => void {
     }
 
     if (mystery) {
-      mainEl.append(renderMysteryAnnounce(mystery, bead.decade, settings));
+      innerEl.append(renderMysteryAnnounce(mystery, bead.decade, settings));
     } else if (prayer) {
-      mainEl.append(renderPrayer(prayer, bead, settings));
+      innerEl.append(renderPrayer(prayer, bead, settings));
     }
 
     if (settings.beadsOnlyMode) {
-      mainEl.append(h("div", { class: "bead-dot" }, [beadOrdinal(bead)]));
+      innerEl.append(h("div", { class: "bead-dot" }, [beadOrdinal(bead)]));
     }
+
+    const mainEl = h(
+      "div",
+      {
+        class: `pray-main${settings.beadsOnlyMode ? " beads-only" : ""}`,
+        onclick: (e: Event) => {
+          if (e.target instanceof HTMLElement && e.target.closest("button, a")) return;
+          goNext();
+        },
+        ontouchstart: onTouchStart,
+        ontouchend: onTouchEnd,
+      },
+      [innerEl],
+    );
 
     const contentEl = h("div", { class: "pray-content" }, [headerEl, mainEl, renderControls()]);
     const layoutEl = h("div", { class: "pray-layout" }, [
@@ -192,12 +198,14 @@ export function mountPray(container: HTMLElement): () => void {
   function renderCompletion(): void {
     root.append(
       h("div", { class: "pray-main" }, [
-        h("div", { class: "complete-banner" }, [
-          h("h2", {}, ["Rosary Complete"]),
-          h("p", { class: "subtle" }, [`${session.mysterySet} Mysteries · ${new Date().toLocaleDateString()}`]),
-        ]),
-        h("div", { class: "cta-row" }, [
-          h("button", { class: "primary", onclick: () => navigate("home") }, ["Return Home"]),
+        h("div", { class: "pray-main-inner" }, [
+          h("div", { class: "complete-banner" }, [
+            h("h2", {}, ["Rosary Complete"]),
+            h("p", { class: "subtle" }, [`${session.mysterySet} Mysteries · ${new Date().toLocaleDateString()}`]),
+          ]),
+          h("div", { class: "cta-row" }, [
+            h("button", { class: "primary", onclick: () => navigate("home") }, ["Return Home"]),
+          ]),
         ]),
       ]),
     );

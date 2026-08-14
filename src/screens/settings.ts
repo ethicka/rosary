@@ -2,6 +2,8 @@ import { h } from "../util/dom.ts";
 import { renderShell } from "../util/layout.ts";
 import { loadSettings, saveSettings, type Settings } from "../state/settings.ts";
 import { applyTheme } from "../util/theme.ts";
+import { renderShortcutList } from "../util/shortcutList.ts";
+import { PRAYER_SHORTCUTS, GLOBAL_SHORTCUTS } from "../data/shortcuts.ts";
 
 export function mountSettings(container: HTMLElement): void {
   const settings = loadSettings();
@@ -79,25 +81,10 @@ export function mountSettings(container: HTMLElement): void {
 
       h("fieldset", {}, [
         h("legend", {}, ["Keyboard shortcuts"]),
-        h("ul", { class: "shortcut-list" }, [
-          shortcutRow(["→", "↓", "Space", "Enter"], "Next"),
-          shortcutRow(["←", "↑", "Backspace"], "Previous"),
-          shortcutRow(["Esc"], "Exit to Home"),
-        ]),
+        renderShortcutList([...GLOBAL_SHORTCUTS, ...PRAYER_SHORTCUTS]),
       ]),
     );
   }
-}
-
-function shortcutRow(keys: string[], action: string): HTMLElement {
-  return h("li", { class: "shortcut-row" }, [
-    h(
-      "span",
-      { class: "shortcut-keys" },
-      keys.map((k) => h("kbd", {}, [k])),
-    ),
-    h("span", { class: "subtle" }, [action]),
-  ]);
 }
 
 function row(label: string, controls: HTMLElement[], hint?: string): HTMLElement {
