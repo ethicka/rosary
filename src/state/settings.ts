@@ -1,13 +1,11 @@
 export type TextSize = "md" | "lg" | "xl";
 export type Theme = "system" | "light" | "dark";
-export type AudioCue = "off" | "sound" | "vibrate";
 
 export interface Settings {
   textSize: TextSize;
   theme: Theme;
   includeFatima: boolean;
   includeStJoseph: boolean;
-  audioCue: AudioCue;
   leaderMode: boolean;
   beadsOnlyMode: boolean;
   language: "en";
@@ -20,7 +18,6 @@ export const DEFAULT_SETTINGS: Settings = {
   theme: "system",
   includeFatima: true,
   includeStJoseph: false,
-  audioCue: "off",
   leaderMode: false,
   beadsOnlyMode: false,
   language: "en",

@@ -71,28 +71,33 @@ export function mountSettings(container: HTMLElement): void {
       ]),
 
       h("fieldset", {}, [
-        h("legend", {}, ["Cues"]),
-        row("Advance cue", [
-          selectField(
-            settings.audioCue,
-            [
-              { value: "off", label: "Off" },
-              { value: "sound", label: "Sound" },
-              { value: "vibrate", label: "Vibrate" },
-            ],
-            (v) => update("audioCue", v as Settings["audioCue"]),
-          ),
-        ]),
-      ]),
-
-      h("fieldset", {}, [
         h("legend", {}, ["Language"]),
         row("Prayer language", [
           selectField("en", [{ value: "en", label: "English" }], () => {}),
         ]),
       ]),
+
+      h("fieldset", {}, [
+        h("legend", {}, ["Keyboard shortcuts"]),
+        h("ul", { class: "shortcut-list" }, [
+          shortcutRow(["→", "↓", "Space", "Enter"], "Next"),
+          shortcutRow(["←", "↑", "Backspace"], "Previous"),
+          shortcutRow(["Esc"], "Exit to Home"),
+        ]),
+      ]),
     );
   }
+}
+
+function shortcutRow(keys: string[], action: string): HTMLElement {
+  return h("li", { class: "shortcut-row" }, [
+    h(
+      "span",
+      { class: "shortcut-keys" },
+      keys.map((k) => h("kbd", {}, [k])),
+    ),
+    h("span", { class: "subtle" }, [action]),
+  ]);
 }
 
 function row(label: string, controls: HTMLElement[], hint?: string): HTMLElement {

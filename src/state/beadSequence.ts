@@ -17,8 +17,8 @@ export interface Bead {
   type: BeadType;
   /** 0 = opening sequence, 1-5 = each Mystery's decade, 6 = closing sequence. */
   decade: number;
-  /** Only meaningful for type "hailMary" within a decade (1-3 for opening, 1-10 within a decade). */
-  beadInDecade?: number;
+  /** Only meaningful for type "hailMary": how many Hail Marys to pray in this single step (3 opening, 10 per decade). */
+  count?: number;
   /** Which of the 5 Mysteries in the active set this decade covers (0-4). */
   mysteryIndex?: number;
 }
@@ -38,9 +38,7 @@ export function buildBeadSequence(options: BeadSequenceOptions): Bead[] {
   beads.push({ type: "signOfCross", decade: 0 });
   beads.push({ type: "creed", decade: 0 });
   beads.push({ type: "ourFather", decade: 0 });
-  for (let b = 1; b <= 3; b++) {
-    beads.push({ type: "hailMary", decade: 0, beadInDecade: b });
-  }
+  beads.push({ type: "hailMary", decade: 0, count: 3 });
   beads.push({ type: "gloryBe", decade: 0 });
 
   // Five decades
@@ -48,9 +46,7 @@ export function buildBeadSequence(options: BeadSequenceOptions): Bead[] {
     const mysteryIndex = decade - 1;
     beads.push({ type: "mysteryAnnounce", decade, mysteryIndex });
     beads.push({ type: "ourFather", decade, mysteryIndex });
-    for (let b = 1; b <= 10; b++) {
-      beads.push({ type: "hailMary", decade, beadInDecade: b, mysteryIndex });
-    }
+    beads.push({ type: "hailMary", decade, count: 10, mysteryIndex });
     beads.push({ type: "gloryBe", decade, mysteryIndex });
     if (options.includeFatima) {
       beads.push({ type: "fatima", decade, mysteryIndex });
@@ -74,7 +70,7 @@ export interface ProgressLabel {
   detailLabel: string;
 }
 
-/** Human-readable progress text, e.g. "Decade 3 - Hail Mary 6 of 10". */
+/** Human-readable progress text, e.g. "Decade 3 - Hail Mary x10". */
 export function describeProgress(bead: Bead, mysterySet: MysterySetName): ProgressLabel {
   if (bead.decade === 0) {
     return { decadeLabel: "Opening", detailLabel: openingDetail(bead) };
@@ -95,7 +91,7 @@ function openingDetail(bead: Bead): string {
     case "ourFather":
       return "Our Father";
     case "hailMary":
-      return `Hail Mary ${bead.beadInDecade} of 3`;
+      return `Hail Mary x${bead.count}`;
     case "gloryBe":
       return "Glory Be";
     default:
@@ -110,7 +106,7 @@ function decadeDetail(bead: Bead): string {
     case "ourFather":
       return "Our Father";
     case "hailMary":
-      return `Hail Mary ${bead.beadInDecade} of 10`;
+      return `Hail Mary x${bead.count}`;
     case "gloryBe":
       return "Glory Be";
     case "fatima":

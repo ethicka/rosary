@@ -1,18 +1,14 @@
 import { h } from "../util/dom.ts";
 import { navigate } from "../util/router.ts";
 import { loadSession, saveSession, clearSession, type RosarySession } from "../state/session.ts";
-import { loadSettings, saveSettings, type Settings } from "../state/settings.ts";
+import { loadSettings, type Settings } from "../state/settings.ts";
 import { buildBeadSequence, describeProgress, type Bead } from "../state/beadSequence.ts";
 import { resolveBead } from "../util/resolveBead.ts";
 import { recordCompletion } from "../state/history.ts";
-import { playAdvanceCue } from "../util/cue.ts";
+import { getMysterySet, type MysterySetName } from "../data/mysteries.ts";
 
-const CUE_CYCLE: Settings["audioCue"][] = ["off", "sound", "vibrate"];
-const CUE_LABEL: Record<Settings["audioCue"], string> = {
-  off: "Cues off",
-  sound: "Sound",
-  vibrate: "Vibrate",
-};
+const NEXT_KEYS = new Set(["ArrowRight", "ArrowDown", "PageDown"]);
+const PREV_KEYS = new Set(["ArrowLeft", "ArrowUp", "PageUp", "Backspace"]);
 
 export function mountPray(container: HTMLElement): () => void {
   const loaded = loadSession();
@@ -53,7 +49,6 @@ export function mountPray(container: HTMLElement): () => void {
     }
     index++;
     persist();
-    playAdvanceCue(settings.audioCue);
     redraw();
   }
 
@@ -64,21 +59,29 @@ export function mountPray(container: HTMLElement): () => void {
     redraw();
   }
 
-  function cycleCue(): void {
-    const next = CUE_CYCLE[(CUE_CYCLE.indexOf(settings.audioCue) + 1) % CUE_CYCLE.length];
-    settings.audioCue = next;
-    saveSettings(settings);
-    redraw();
-  }
-
   function onKeydown(e: KeyboardEvent): void {
-    if (e.target instanceof HTMLElement && ["SELECT", "INPUT", "TEXTAREA"].includes(e.target.tagName)) return;
-    if (e.key === "ArrowRight" || e.key === " " || e.key === "Spacebar") {
+    const target = e.target;
+    if (target instanceof HTMLElement && ["SELECT", "INPUT", "TEXTAREA"].includes(target.tagName)) return;
+    const isButtonFocused = target instanceof HTMLElement && ["BUTTON", "A"].includes(target.tagName);
+
+    if (e.key === "Escape") {
+      e.preventDefault();
+      navigate("home");
+      return;
+    }
+    if (NEXT_KEYS.has(e.key)) {
       e.preventDefault();
       goNext();
-    } else if (e.key === "ArrowLeft") {
+      return;
+    }
+    if (PREV_KEYS.has(e.key)) {
       e.preventDefault();
       goPrev();
+      return;
+    }
+    if (!isButtonFocused && (e.key === " " || e.key === "Spacebar" || e.key === "Enter")) {
+      e.preventDefault();
+      goNext();
     }
   }
   document.addEventListener("keydown", onKeydown);
@@ -127,15 +130,7 @@ export function mountPray(container: HTMLElement): () => void {
         h("div", {}, [progress.decadeLabel]),
         h("div", {}, [progress.detailLabel]),
       ]),
-      h(
-        "button",
-        {
-          class: "ghost small",
-          "aria-label": `Advance cue: ${CUE_LABEL[settings.audioCue]}. Activate to change.`,
-          onclick: cycleCue,
-        },
-        [CUE_LABEL[settings.audioCue]],
-      ),
+      h("div", { class: "pray-header-spacer" }),
     ]);
 
     const mainEl = h("div", {
@@ -165,14 +160,20 @@ export function mountPray(container: HTMLElement): () => void {
     if (mystery) {
       mainEl.append(renderMysteryAnnounce(mystery, bead.decade, settings));
     } else if (prayer) {
-      mainEl.append(renderPrayer(prayer, settings));
+      mainEl.append(renderPrayer(prayer, bead, settings));
     }
 
     if (settings.beadsOnlyMode) {
       mainEl.append(h("div", { class: "bead-dot" }, [beadOrdinal(bead)]));
     }
 
-    root.append(headerEl, mainEl, renderControls());
+    const contentEl = h("div", { class: "pray-content" }, [headerEl, mainEl, renderControls()]);
+    const layoutEl = h("div", { class: "pray-layout" }, [
+      renderSidebar(bead, session.mysterySet),
+      contentEl,
+    ]);
+
+    root.append(layoutEl);
   }
 
   function renderControls(): HTMLElement {
@@ -209,8 +210,34 @@ export function mountPray(container: HTMLElement): () => void {
   };
 }
 
+function renderSidebar(bead: Bead, mysterySet: MysterySetName): HTMLElement {
+  const mysteries = getMysterySet(mysterySet);
+  const items = mysteries.map((m) => {
+    const decadeNum = m.order;
+    let state: "done" | "active" | "upcoming";
+    if (bead.decade === 6) state = "done";
+    else if (bead.decade === 0) state = "upcoming";
+    else if (bead.decade === decadeNum) state = "active";
+    else if (bead.decade > decadeNum) state = "done";
+    else state = "upcoming";
+
+    return h(
+      "li",
+      {
+        class: `decade-item decade-${state}`,
+        "aria-current": state === "active" ? "step" : null,
+      },
+      [
+        h("span", { class: "decade-num" }, [String(decadeNum)]),
+        h("span", { class: "decade-name" }, [m.title]),
+      ],
+    );
+  });
+  return h("aside", { class: "decade-sidebar", "aria-label": "Decade progress" }, [h("ol", {}, items)]);
+}
+
 function beadOrdinal(bead: Bead): string {
-  if (bead.type === "hailMary" && bead.beadInDecade) return String(bead.beadInDecade);
+  if (bead.type === "hailMary" && bead.count) return `×${bead.count}`;
   return "•";
 }
 
@@ -234,11 +261,20 @@ function renderMysteryAnnounce(
   return h("div", { class: "mystery-announce" }, children);
 }
 
-function renderPrayer(prayer: ReturnType<typeof resolveBead>["prayer"], settings: Settings): HTMLElement {
+function renderPrayer(
+  prayer: ReturnType<typeof resolveBead>["prayer"],
+  bead: Bead,
+  settings: Settings,
+): HTMLElement {
   if (!prayer) return h("div", {});
   const title = h("h2", { class: "prayer-title" }, [prayer.title]);
   if (settings.beadsOnlyMode) {
     return h("div", {}, [title]);
+  }
+
+  const children: HTMLElement[] = [title];
+  if (bead.type === "hailMary" && bead.count) {
+    children.push(h("p", { class: "subtle repeat-count" }, [`Pray ${bead.count} times`]));
   }
 
   const useLeaderSplit = settings.leaderMode && prayer.leaderLines;
@@ -249,13 +285,14 @@ function renderPrayer(prayer: ReturnType<typeof resolveBead>["prayer"], settings
     const allLines = prayer.lines.slice(prayer.leaderLines);
     textEl.append(
       h("span", { class: "call-response-label" }, ["Leader"]),
-      h("p", {}, [h("span", { class: "leader-line" }, [leaderLines.join(" ")])]),
+      h("p", {}, [h("span", { class: "leader-line" }, [leaderLines.join("\n")])]),
       h("span", { class: "call-response-label" }, ["All"]),
-      h("p", {}, [h("span", { class: "all-line" }, [allLines.join(" ")])]),
+      h("p", {}, [h("span", { class: "all-line" }, [allLines.join("\n")])]),
     );
   } else {
-    textEl.append(h("p", {}, [prayer.lines.join(" ")]));
+    textEl.append(h("p", {}, [prayer.lines.join("\n")]));
   }
+  children.push(textEl);
 
-  return h("div", {}, [title, textEl]);
+  return h("div", {}, children);
 }
