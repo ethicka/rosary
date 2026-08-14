@@ -12,7 +12,7 @@ export function mountHome(container: HTMLElement): void {
   const defaultSelection = getDefaultMysterySet(today);
   let selectedSet: MysterySetName = defaultSelection.set;
 
-  const body = h("div", {});
+  const body = h("div", { class: "home-body" });
   renderShell(container, "home", body);
   redraw();
 
@@ -25,10 +25,6 @@ export function mountHome(container: HTMLElement): void {
       month: "long",
       day: "numeric",
     });
-
-    body.append(
-      h("div", { class: "home-hero" }, [h("p", { class: "hero-date" }, [dateStr])]),
-    );
 
     const existingSession = loadSession();
     if (existingSession) {
@@ -73,40 +69,41 @@ export function mountHome(container: HTMLElement): void {
     }
 
     body.append(
-      h("div", { class: "today-card" }, [
-        h("p", { class: "eyebrow" }, [`Today's Mystery · ${defaultSelection.reason}`]),
-        h("h2", { class: "set-name" }, [`${defaultSelection.set} Mysteries`]),
-        h("p", { class: "set-tagline" }, [MYSTERY_SET_TAGLINE[defaultSelection.set]]),
+      h("p", { class: "home-sentence" }, [
+        "Today is ",
+        h("strong", {}, [dateStr]),
+        " and the mystery is the ",
+        h("strong", { class: "accent-text" }, [selectedSet]),
+        " mysteries: ",
+        MYSTERY_SET_TAGLINE[selectedSet],
+        ".",
       ]),
     );
 
-    body.append(h("p", { class: "picker-label subtle" }, ["Or pray a different set:"]));
     body.append(
-      h(
-        "div",
-        { class: "set-picker", role: "group", "aria-label": "Choose Mystery set" },
-        MYSTERY_SETS.map((set) =>
-          h(
-            "button",
-            {
-              "aria-pressed": String(set === selectedSet),
-              onclick: () => {
-                selectedSet = set;
-                redraw();
-              },
+      h("div", { class: "home-actions" }, [
+        h(
+          "label",
+          { class: "sr-only", for: "mystery-set-select" },
+          ["Choose Mystery set"],
+        ),
+        h(
+          "select",
+          {
+            id: "mystery-set-select",
+            onchange: (e: Event) => {
+              selectedSet = (e.target as HTMLSelectElement).value as MysterySetName;
+              redraw();
             },
-            [`${set}`],
+          },
+          MYSTERY_SETS.map((set) =>
+            h("option", { value: set, selected: set === selectedSet }, [`${set} Mysteries`]),
           ),
         ),
-      ),
-    );
-
-    body.append(
-      h("div", { class: "cta-row" }, [
         h(
           "button",
           {
-            class: "primary start-button",
+            class: "primary",
             onclick: () => startRosary(),
           },
           ["Start Rosary"],

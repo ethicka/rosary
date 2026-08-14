@@ -187,20 +187,17 @@ export function mountPray(container: HTMLElement): () => void {
 
   function renderControls(): HTMLElement {
     const isLast = index >= sequence.length - 1;
-    return h("div", {}, [
-      h("div", { class: "pray-controls" }, [
-        h(
-          "button",
-          { onclick: goPrev, disabled: index === 0, "aria-label": "Previous" },
-          [h("span", { class: "key-hint" }, ["<"]), " Prev"],
-        ),
-        h(
-          "button",
-          { onclick: goNext, "aria-label": isLast ? "Finish" : "Next" },
-          [isLast ? "Finish" : "Next", " ", h("span", { class: "key-hint" }, [">"])],
-        ),
-      ]),
-      h("p", { class: "subtle pray-controls-hint" }, ["Space also advances"]),
+    return h("div", { class: "pray-controls" }, [
+      h(
+        "button",
+        { onclick: goPrev, disabled: index === 0, "aria-label": "Previous" },
+        ["← Previous"],
+      ),
+      h(
+        "button",
+        { onclick: goNext, "aria-label": isLast ? "Finish" : "Next" },
+        [isLast ? "Finish" : "Next", " →"],
+      ),
     ]);
   }
 
