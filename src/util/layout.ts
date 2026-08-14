@@ -51,7 +51,10 @@ export function renderShell(container: HTMLElement, active: RouteName, content: 
   container.replaceChildren(header, main, renderFooter());
   // Move focus to the new screen's content so screen-reader users hear the
   // route change announced, matching standard SPA accessibility practice.
-  main.focus({ preventScroll: false });
+  // preventScroll avoids the browser also scrolling the header out of view
+  // to bring the newly focused (but already-visible) main element flush to
+  // the top of the viewport.
+  main.focus({ preventScroll: true });
 }
 
 function renderFooter(): HTMLElement {
