@@ -2,7 +2,7 @@ import { h } from "../util/dom.ts";
 import { renderShell } from "../util/layout.ts";
 import { navigate } from "../util/router.ts";
 import { getDefaultMysterySet } from "../data/liturgical.ts";
-import { MYSTERY_SETS, MYSTERY_SET_TAGLINE, type MysterySetName } from "../data/mysteries.ts";
+import { MYSTERY_SETS, MYSTERY_SET_TAGLINE, MYSTERY_SET_DAYS, type MysterySetName } from "../data/mysteries.ts";
 import { loadSettings } from "../state/settings.ts";
 import { loadSession, saveSession, clearSession } from "../state/session.ts";
 import { buildBeadSequence, describeProgress } from "../state/beadSequence.ts";
@@ -68,17 +68,34 @@ export function mountHome(container: HTMLElement): void {
       }
     }
 
-    body.append(
-      h("p", { class: "home-sentence" }, [
-        "Today is ",
-        h("strong", {}, [dateStr]),
-        " and the mystery is the ",
-        h("strong", { class: "accent-text" }, [selectedSet]),
-        " mysteries: ",
-        MYSTERY_SET_TAGLINE[selectedSet],
-        ".",
-      ]),
-    );
+    // Sundays in Advent or Lent override the usual Sunday (Glorious) default —
+    // call that out explicitly so it doesn't read as a mistake.
+    const isSeasonalException =
+      defaultSelection.reason === "Sunday in Advent" || defaultSelection.reason === "Sunday in Lent";
+
+    const sentence = isSeasonalException
+      ? [
+          "Today is ",
+          h("strong", {}, [dateStr]),
+          ". Sundays are usually the Glorious mysteries, but during ",
+          defaultSelection.reason.endsWith("Advent") ? "Advent" : "Lent",
+          " the mystery is the ",
+          h("strong", { class: "accent-text" }, [defaultSelection.set]),
+          " mysteries: ",
+          MYSTERY_SET_TAGLINE[defaultSelection.set],
+          ".",
+        ]
+      : [
+          "Today is ",
+          h("strong", {}, [dateStr]),
+          " and the mystery is the ",
+          h("strong", { class: "accent-text" }, [defaultSelection.set]),
+          " mysteries: ",
+          MYSTERY_SET_TAGLINE[defaultSelection.set],
+          ".",
+        ];
+
+    body.append(h("p", { class: "home-sentence" }, sentence));
 
     body.append(
       h("div", { class: "home-actions" }, [
@@ -93,11 +110,12 @@ export function mountHome(container: HTMLElement): void {
             id: "mystery-set-select",
             onchange: (e: Event) => {
               selectedSet = (e.target as HTMLSelectElement).value as MysterySetName;
-              redraw();
             },
           },
           MYSTERY_SETS.map((set) =>
-            h("option", { value: set, selected: set === selectedSet }, [`${set} Mysteries`]),
+            h("option", { value: set, selected: set === selectedSet }, [
+              `${set} Mysteries (${MYSTERY_SET_DAYS[set]})`,
+            ]),
           ),
         ),
         h(

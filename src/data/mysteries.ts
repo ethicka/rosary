@@ -26,6 +26,14 @@ export const MYSTERY_SET_TAGLINE: Record<MysterySetName, string> = {
   Luminous: "The public ministry of Christ",
 };
 
+/** The days of the week each set is traditionally prayed on (per USCCB). */
+export const MYSTERY_SET_DAYS: Record<MysterySetName, string> = {
+  Joyful: "Mon, Sat",
+  Sorrowful: "Tue, Fri",
+  Glorious: "Wed, Sun",
+  Luminous: "Thu",
+};
+
 export const MYSTERIES: Mystery[] = [
   // Joyful
   {
