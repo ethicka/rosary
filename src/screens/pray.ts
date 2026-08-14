@@ -206,7 +206,7 @@ export function mountPray(container: HTMLElement): () => void {
       h("div", { class: "pray-main" }, [
         h("div", { class: "pray-main-inner" }, [
           h("div", { class: "complete-banner" }, [
-            h("h2", {}, ["Rosary Complete"]),
+            h("h2", {}, ["God bless you."]),
             h("p", {}, ["Peace be with you."]),
           ]),
           h("div", { class: "cta-row" }, [
