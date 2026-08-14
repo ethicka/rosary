@@ -1,10 +1,11 @@
 import { h } from "../util/dom.ts";
 import { navigate } from "../util/router.ts";
 import { loadSession, saveSession, clearSession, type RosarySession } from "../state/session.ts";
-import { loadSettings, type Settings } from "../state/settings.ts";
+import { loadSettings, type Settings, type HideablePrayer } from "../state/settings.ts";
 import { buildBeadSequence, describeProgress, type Bead } from "../state/beadSequence.ts";
 import { resolveBead } from "../util/resolveBead.ts";
 import { getMysterySet, type MysterySetName } from "../data/mysteries.ts";
+import { HOME_ICON_SVG } from "../util/icon.ts";
 
 const NEXT_KEYS = new Set(["ArrowRight", "ArrowDown", "PageDown"]);
 const PREV_KEYS = new Set(["ArrowLeft", "ArrowUp", "PageUp", "Backspace"]);
@@ -118,11 +119,12 @@ export function mountPray(container: HTMLElement): () => void {
       h(
         "button",
         {
-          class: "ghost small",
+          class: "ghost small home-button",
           "aria-label": "Exit to Home",
+          html: HOME_ICON_SVG,
           onclick: () => navigate("home"),
         },
-        ["← Home"],
+        [],
       ),
       h("div", { class: "pray-progress" }, [
         h("div", {}, [progress.decadeLabel]),
@@ -131,21 +133,23 @@ export function mountPray(container: HTMLElement): () => void {
       h("div", { class: "pray-header-spacer" }),
     ]);
 
-    const innerEl = h("div", { class: "pray-main-inner" });
+    const elements: HTMLElement[] = [headerEl];
 
-    const showMysteryChip =
+    const showSubheader =
       bead.decade >= 1 && bead.decade <= 5 && bead.type !== "mysteryAnnounce" && mystery === undefined;
-    if (showMysteryChip) {
-      const chipMystery = resolveBead({ ...bead, type: "mysteryAnnounce" }, session.mysterySet).mystery;
-      if (chipMystery) {
-        innerEl.append(
-          h("div", { class: "mystery-chip" }, [
-            h("strong", {}, [`Decade ${bead.decade}: ${chipMystery.title}`]),
-            h("span", {}, [`Fruit: ${chipMystery.fruit}`]),
+    if (showSubheader) {
+      const subheaderMystery = resolveBead({ ...bead, type: "mysteryAnnounce" }, session.mysterySet).mystery;
+      if (subheaderMystery) {
+        elements.push(
+          h("div", { class: "pray-subheader" }, [
+            h("strong", {}, [`Decade ${bead.decade}: ${subheaderMystery.title}`]),
+            h("span", { class: "subtle" }, [` · Fruit: ${subheaderMystery.fruit}`]),
           ]),
         );
       }
     }
+
+    const innerEl = h("div", { class: "pray-main-inner" });
 
     if (mystery) {
       innerEl.append(renderMysteryAnnounce(mystery, bead.decade, settings));
@@ -171,27 +175,32 @@ export function mountPray(container: HTMLElement): () => void {
       [innerEl],
     );
 
-    const contentEl = h("div", { class: "pray-content" }, [headerEl, mainEl, renderControls()]);
+    const contentEl = h("div", { class: "pray-content" }, [mainEl, renderControls()]);
     const layoutEl = h("div", { class: "pray-layout" }, [
       renderSidebar(bead, session.mysterySet),
       contentEl,
     ]);
+    elements.push(layoutEl);
 
-    root.append(layoutEl);
+    root.append(...elements);
   }
 
   function renderControls(): HTMLElement {
-    return h("div", { class: "pray-controls" }, [
-      h(
-        "button",
-        { onclick: goPrev, disabled: index === 0, "aria-label": "Previous" },
-        ["Prev"],
-      ),
-      h(
-        "button",
-        { class: "primary", onclick: goNext, "aria-label": index >= sequence.length - 1 ? "Finish" : "Next" },
-        [index >= sequence.length - 1 ? "Finish" : "Next"],
-      ),
+    const isLast = index >= sequence.length - 1;
+    return h("div", {}, [
+      h("div", { class: "pray-controls" }, [
+        h(
+          "button",
+          { onclick: goPrev, disabled: index === 0, "aria-label": "Previous" },
+          [h("span", { class: "key-hint" }, ["<"]), " Prev"],
+        ),
+        h(
+          "button",
+          { onclick: goNext, "aria-label": isLast ? "Finish" : "Next" },
+          [isLast ? "Finish" : "Next", " ", h("span", { class: "key-hint" }, [">"])],
+        ),
+      ]),
+      h("p", { class: "subtle pray-controls-hint" }, ["Space also advances"]),
     ]);
   }
 
@@ -201,7 +210,7 @@ export function mountPray(container: HTMLElement): () => void {
         h("div", { class: "pray-main-inner" }, [
           h("div", { class: "complete-banner" }, [
             h("h2", {}, ["Rosary Complete"]),
-            h("p", { class: "subtle" }, [`${session.mysterySet} Mysteries · ${new Date().toLocaleDateString()}`]),
+            h("p", {}, ["Peace be with you."]),
           ]),
           h("div", { class: "cta-row" }, [
             h("button", { class: "primary", onclick: () => navigate("home") }, ["Return Home"]),
@@ -274,7 +283,9 @@ function renderPrayer(
 ): HTMLElement {
   if (!prayer) return h("div", {});
   const title = h("h2", { class: "prayer-title" }, [prayer.title]);
-  if (settings.beadsOnlyMode) {
+
+  const hidden = settings.beadsOnlyMode || settings.hiddenPrayers.includes(bead.type as HideablePrayer);
+  if (hidden) {
     return h("div", {}, [title]);
   }
 
@@ -283,21 +294,7 @@ function renderPrayer(
     children.push(h("p", { class: "subtle repeat-count" }, [`Pray ${bead.count} times`]));
   }
 
-  const useLeaderSplit = settings.leaderMode && prayer.leaderLines;
-  const textEl = h("div", { class: "prayer-text" });
-
-  if (useLeaderSplit) {
-    const leaderLines = prayer.lines.slice(0, prayer.leaderLines);
-    const allLines = prayer.lines.slice(prayer.leaderLines);
-    textEl.append(
-      h("span", { class: "call-response-label" }, ["Leader"]),
-      h("p", {}, [h("span", { class: "leader-line" }, [leaderLines.join("\n")])]),
-      h("span", { class: "call-response-label" }, ["All"]),
-      h("p", {}, [h("span", { class: "all-line" }, [allLines.join("\n")])]),
-    );
-  } else {
-    textEl.append(h("p", {}, [prayer.lines.join("\n")]));
-  }
+  const textEl = h("div", { class: "prayer-text" }, [h("p", {}, [prayer.lines.join("\n")])]);
   children.push(textEl);
 
   return h("div", {}, children);

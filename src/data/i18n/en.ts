@@ -7,8 +7,6 @@
 export interface PrayerText {
   title: string;
   lines: string[];
-  /** Number of leading lines spoken by the leader before the group responds (leader/group split). */
-  leaderLines?: number;
 }
 
 export const en = {
@@ -62,7 +60,6 @@ export const en = {
         "but deliver us from evil.",
         "Amen",
       ],
-      leaderLines: 4,
     } as PrayerText,
     hailMary: {
       title: "Hail Mary",
@@ -75,7 +72,6 @@ export const en = {
         "now and at the hour of our death.",
         "Amen.",
       ],
-      leaderLines: 3,
     } as PrayerText,
     gloryBe: {
       title: "Glory Be",

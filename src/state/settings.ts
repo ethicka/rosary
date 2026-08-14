@@ -1,13 +1,18 @@
+import type { BeadType } from "./beadSequence.ts";
+
 export type TextSize = "md" | "lg" | "xl";
 export type Theme = "system" | "light" | "dark";
+
+/** Bead types whose prayer text can be individually hidden ("known by heart"). Excludes mysteryAnnounce, which isn't a recited prayer. */
+export type HideablePrayer = Exclude<BeadType, "mysteryAnnounce">;
 
 export interface Settings {
   textSize: TextSize;
   theme: Theme;
   includeFatima: boolean;
   includeStJoseph: boolean;
-  leaderMode: boolean;
   beadsOnlyMode: boolean;
+  hiddenPrayers: HideablePrayer[];
   language: "en";
 }
 
@@ -18,8 +23,8 @@ export const DEFAULT_SETTINGS: Settings = {
   theme: "system",
   includeFatima: true,
   includeStJoseph: false,
-  leaderMode: false,
   beadsOnlyMode: false,
+  hiddenPrayers: [],
   language: "en",
 };
 

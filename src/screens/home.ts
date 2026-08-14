@@ -113,23 +113,6 @@ export function mountHome(container: HTMLElement): void {
         ),
       ]),
     );
-
-    body.append(
-      h("ul", { class: "link-list" }, [
-        h("li", {}, [
-          h("a", { href: "#/mysteries" }, [
-            h("span", {}, ["Browse all 20 Mysteries"]),
-            h("span", { class: "chevron", "aria-hidden": "true" }, ["→"]),
-          ]),
-        ]),
-        h("li", {}, [
-          h("a", { href: "#/settings" }, [
-            h("span", {}, ["Settings"]),
-            h("span", { class: "chevron", "aria-hidden": "true" }, ["→"]),
-          ]),
-        ]),
-      ]),
-    );
   }
 
   function startRosary(): void {

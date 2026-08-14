@@ -12,5 +12,5 @@ export const PRAYER_SHORTCUTS: ShortcutEntry[] = [
 
 /** Shortcuts active anywhere in the app. */
 export const GLOBAL_SHORTCUTS: ShortcutEntry[] = [
-  { keys: ["⌘/Ctrl", "?"], action: "Show this help" },
+  { keys: ["Shift", "?"], action: "Show this help" },
 ];

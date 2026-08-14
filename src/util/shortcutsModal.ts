@@ -34,7 +34,7 @@ function open(): void {
       renderShortcutList(PRAYER_SHORTCUTS),
       h("p", { class: "subtle", style: "margin-top: 1rem;" }, [
         "Press ",
-        h("kbd", {}, ["⌘/Ctrl"]),
+        h("kbd", {}, ["Shift"]),
         " + ",
         h("kbd", {}, ["?"]),
         " anywhere to open this help.",
@@ -59,14 +59,17 @@ function onKeydown(e: KeyboardEvent): void {
   // While open, swallow every keystroke before other document-level
   // listeners (e.g. the Prayer screen's own navigation shortcuts) see it.
   if (isOpen()) {
-    if (e.key === "Escape" || ((e.metaKey || e.ctrlKey) && e.key === "?")) {
+    if (e.key === "Escape" || e.key === "?") {
       e.preventDefault();
       close();
     }
     e.stopImmediatePropagation();
     return;
   }
-  if ((e.metaKey || e.ctrlKey) && e.key === "?") {
+  const target = e.target;
+  const isFormEl = target instanceof HTMLElement && ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
+  // "?" is Shift+/ on a standard layout, so e.key already reflects the Shift press.
+  if (e.key === "?" && !isFormEl) {
     e.preventDefault();
     open();
   }

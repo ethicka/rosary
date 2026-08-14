@@ -12,8 +12,7 @@
   --danger: #ae2c1e;
   --shadow: 0 1px 3px rgba(19, 28, 46, 0.08), 0 1px 2px rgba(19, 28, 46, 0.06);
   --radius: 12px;
-  --leader-bg: #e7eefc;
-  --all-bg: #f1ecfa;
+  --tint-bg: #e7eefc;
 }
 
 :root:not([data-theme="light"]) {
@@ -28,8 +27,7 @@
     --focus-ring: #8fb8f5;
     --danger: #f2897a;
     --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-    --leader-bg: #1b2a46;
-    --all-bg: #241f3d;
+    --tint-bg: #1b2a46;
   }
 }
 
@@ -44,8 +42,7 @@
   --focus-ring: #8fb8f5;
   --danger: #f2897a;
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-  --leader-bg: #1b2a46;
-  --all-bg: #241f3d;
+  --tint-bg: #1b2a46;
 }
 
 * {
@@ -259,7 +256,7 @@ kbd {
 }
 
 .app-nav a[aria-current="page"] {
-  background: var(--leader-bg);
+  background: var(--tint-bg);
   color: var(--text);
   font-weight: 600;
 }
@@ -354,7 +351,7 @@ main {
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
-  background: var(--leader-bg);
+  background: var(--tint-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1rem 1.25rem;
@@ -372,35 +369,6 @@ main {
 .start-button {
   font-size: 1.1rem;
   padding: 0.85em 2.5em;
-}
-
-.link-list {
-  list-style: none;
-  padding: 0;
-  margin: 2rem 0 0;
-  display: grid;
-  gap: 0.6rem;
-}
-
-.link-list a {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  text-decoration: none;
-  color: var(--text);
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 0.85rem 1.1rem;
-  transition: border-color 0.15s ease;
-}
-
-.link-list a:hover {
-  border-color: var(--accent);
-}
-
-.link-list .chevron {
-  color: var(--text-muted);
 }
 
 /* ---------- Prayer step screen ---------- */
@@ -474,7 +442,7 @@ main {
 }
 
 .decade-item.decade-active {
-  background: var(--leader-bg);
+  background: var(--tint-bg);
   color: var(--text);
   font-weight: 600;
 }
@@ -546,6 +514,24 @@ main {
   color: var(--text-muted);
 }
 
+.home-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  font-size: 1.1rem;
+}
+
+.pray-subheader {
+  text-align: center;
+  padding: 0.55rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--tint-bg);
+  font-size: 0.92rem;
+}
+
 .pray-main {
   flex: 1;
   min-height: 0;
@@ -582,18 +568,6 @@ main {
   outline: none;
 }
 
-.mystery-chip {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 0.6rem 1rem;
-  font-size: 0.95rem;
-  color: var(--text-muted);
-}
-
 .prayer-title {
   font-size: calc(2.1rem * var(--font-scale, 1) / var(--font-scale, 1));
   font-size: 2.1rem;
@@ -609,30 +583,6 @@ main {
 
 .prayer-text p {
   margin: 0 0 0.6em;
-}
-
-.prayer-text .leader-line {
-  background: var(--leader-bg);
-}
-.prayer-text .all-line {
-  background: var(--all-bg);
-}
-.prayer-text .leader-line,
-.prayer-text .all-line {
-  border-radius: 6px;
-  padding: 0.05em 0.35em;
-  display: inline;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-}
-
-.call-response-label {
-  font-size: 0.75em;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-  display: block;
-  margin: 0.9em 0 0.15em;
 }
 
 .mystery-announce .mystery-title {
@@ -670,16 +620,42 @@ main {
 
 .pray-controls {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem 1.75rem;
+  border-top: 1px solid var(--border);
 }
 
 .pray-controls button {
-  min-width: 6.5rem;
-  padding: 0.85em 1.1em;
+  flex: 1 1 50%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55em;
+  padding: 1em;
   font-size: 1.05rem;
+  border: none;
+  border-right: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.pray-controls button:last-child {
+  border-right: none;
+}
+
+.pray-controls button:hover:not(:disabled) {
+  background: var(--tint-bg);
+}
+
+.key-hint {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color: var(--text-muted);
+}
+
+.pray-controls-hint {
+  text-align: center;
+  font-size: 0.78rem;
+  margin: 0.4rem 0 0.9rem;
 }
 
 .sr-only {
@@ -695,7 +671,7 @@ main {
 }
 
 .complete-banner {
-  background: var(--leader-bg);
+  background: var(--tint-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.5rem;

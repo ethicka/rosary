@@ -57,6 +57,8 @@ function renderFooter(): HTMLElement {
       ]),
       ".",
     ]),
-    h("p", {}, ["No account, no tracking, no ads — everything stays on your device."]),
+    h("p", {}, [
+      "No account, no ads. Your Rosary progress and settings stay on your device; anonymous, cookie-free page-view analytics (Vercel Analytics and Fathom) help us see how the app is used.",
+    ]),
   ]);
 }

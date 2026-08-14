@@ -1,9 +1,23 @@
 import { h } from "../util/dom.ts";
 import { renderShell } from "../util/layout.ts";
-import { loadSettings, saveSettings, type Settings } from "../state/settings.ts";
+import { loadSettings, saveSettings, type Settings, type HideablePrayer } from "../state/settings.ts";
 import { applyTheme } from "../util/theme.ts";
 import { renderShortcutList } from "../util/shortcutList.ts";
 import { PRAYER_SHORTCUTS, GLOBAL_SHORTCUTS } from "../data/shortcuts.ts";
+import { en } from "../data/i18n/en.ts";
+
+const HIDEABLE_PRAYERS: { type: HideablePrayer; title: string }[] = [
+  { type: "signOfCross", title: en.prayers.signOfCross.title },
+  { type: "creed", title: en.prayers.creed.title },
+  { type: "ourFather", title: en.prayers.ourFather.title },
+  { type: "hailMary", title: en.prayers.hailMary.title },
+  { type: "gloryBe", title: en.prayers.gloryBe.title },
+  { type: "fatima", title: en.prayers.fatima.title },
+  { type: "hailHolyQueen", title: en.prayers.hailHolyQueen.title },
+  { type: "versicleResponse", title: en.prayers.versicleResponse.title },
+  { type: "closingPrayer", title: en.prayers.closingPrayer.title },
+  { type: "stJoseph", title: en.prayers.stJoseph.title },
+];
 
 export function mountSettings(container: HTMLElement): void {
   const settings = loadSettings();
@@ -16,6 +30,13 @@ export function mountSettings(container: HTMLElement): void {
     saveSettings(settings);
     applyTheme(settings);
     redraw();
+  }
+
+  function toggleHidden(type: HideablePrayer, hide: boolean): void {
+    const set = new Set(settings.hiddenPrayers);
+    if (hide) set.add(type);
+    else set.delete(type);
+    update("hiddenPrayers", Array.from(set));
   }
 
   function redraw(): void {
@@ -47,14 +68,9 @@ export function mountSettings(container: HTMLElement): void {
           ),
         ]),
         row(
-          "Group leader mode",
-          [toggle(settings.leaderMode, (v) => update("leaderMode", v))],
-          "Larger text with a Leader / All response split for the Our Father and Hail Mary.",
-        ),
-        row(
           "Beads-only mode",
           [toggle(settings.beadsOnlyMode, (v) => update("beadsOnlyMode", v))],
-          "Hide prayer text and show only a minimal bead counter, for silent prayer from memory.",
+          "Hide all prayer text and show only a minimal bead counter, for silent prayer from memory.",
         ),
       ]),
 
@@ -69,6 +85,18 @@ export function mountSettings(container: HTMLElement): void {
           "Include Prayer to St. Joseph",
           [toggle(settings.includeStJoseph, (v) => update("includeStJoseph", v))],
           "Said near the end, after the Hail, Holy Queen.",
+        ),
+      ]),
+
+      h("fieldset", {}, [
+        h("legend", {}, ["Prayers you know by heart"]),
+        h("p", { class: "subtle", style: "margin: -0.25rem 0 0.75rem; font-size: 0.85em;" }, [
+          "Hide the text for prayers you've memorized — only the title will show.",
+        ]),
+        ...HIDEABLE_PRAYERS.map((p) =>
+          row(p.title, [
+            toggle(settings.hiddenPrayers.includes(p.type), (v) => toggleHidden(p.type, v)),
+          ]),
         ),
       ]),
 
