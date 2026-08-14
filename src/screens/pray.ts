@@ -4,7 +4,6 @@ import { loadSession, saveSession, clearSession, type RosarySession } from "../s
 import { loadSettings, type Settings } from "../state/settings.ts";
 import { buildBeadSequence, describeProgress, type Bead } from "../state/beadSequence.ts";
 import { resolveBead } from "../util/resolveBead.ts";
-import { recordCompletion } from "../state/history.ts";
 import { getMysterySet, type MysterySetName } from "../data/mysteries.ts";
 
 const NEXT_KEYS = new Set(["ArrowRight", "ArrowDown", "PageDown"]);
@@ -41,7 +40,6 @@ export function mountPray(container: HTMLElement): () => void {
   function goNext(): void {
     if (completed) return;
     if (index >= sequence.length - 1) {
-      recordCompletion(session.mysterySet);
       clearSession();
       completed = true;
       redraw();

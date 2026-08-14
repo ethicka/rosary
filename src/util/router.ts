@@ -1,4 +1,4 @@
-export type RouteName = "home" | "pray" | "settings" | "mysteries" | "history";
+export type RouteName = "home" | "pray" | "settings" | "mysteries";
 
 export type RouteRenderer = (container: HTMLElement) => void | (() => void);
 

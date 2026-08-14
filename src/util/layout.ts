@@ -4,7 +4,6 @@ import { navigate, type RouteName } from "./router.ts";
 const NAV_ITEMS: { route: RouteName; label: string }[] = [
   { route: "home", label: "Home" },
   { route: "mysteries", label: "Mysteries" },
-  { route: "history", label: "History" },
   { route: "settings", label: "Settings" },
 ];
 

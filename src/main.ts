@@ -6,7 +6,6 @@ import { mountHome } from "./screens/home.ts";
 import { mountPray } from "./screens/pray.ts";
 import { mountSettings } from "./screens/settings.ts";
 import { mountMysteries } from "./screens/mysteries.ts";
-import { mountHistory } from "./screens/history.ts";
 
 applyTheme(loadSettings());
 
@@ -14,7 +13,6 @@ registerRoute("home", mountHome);
 registerRoute("pray", mountPray);
 registerRoute("settings", mountSettings);
 registerRoute("mysteries", mountMysteries);
-registerRoute("history", mountHistory);
 
 startRouter();
 

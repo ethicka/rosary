@@ -115,7 +115,6 @@ export function mountHome(container: HTMLElement): void {
     body.append(
       h("ul", { class: "link-list" }, [
         h("li", {}, [h("a", { href: "#/mysteries" }, ["Browse all 20 Mysteries"])]),
-        h("li", {}, [h("a", { href: "#/history" }, ["Streak & history"])]),
         h("li", {}, [h("a", { href: "#/settings" }, ["Settings"])]),
       ]),
     );
