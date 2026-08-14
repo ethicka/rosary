@@ -1,0 +1,513 @@
+/* ---------- Design tokens ---------- */
+:root {
+  --font-scale: 1;
+  --bg: #faf7f2;
+  --bg-elevated: #ffffff;
+  --text: #1c1a17;
+  --text-muted: #55504a;
+  --accent: #6b3f2a;
+  --accent-contrast: #ffffff;
+  --border: #ddd4c7;
+  --focus-ring: #1a5fb4;
+  --danger: #8a1f11;
+  --shadow: 0 1px 3px rgba(28, 26, 23, 0.08), 0 1px 2px rgba(28, 26, 23, 0.06);
+  --radius: 12px;
+  --leader-bg: #f1e6d8;
+  --all-bg: #e7eef0;
+}
+
+:root:not([data-theme="light"]) {
+  @media (prefers-color-scheme: dark) {
+    --bg: #17140f;
+    --bg-elevated: #221e18;
+    --text: #f3efe7;
+    --text-muted: #c7bfb2;
+    --accent: #d8a978;
+    --accent-contrast: #1c1006;
+    --border: #3c352a;
+    --focus-ring: #7cb0f0;
+    --danger: #e5897a;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --leader-bg: #332a1d;
+    --all-bg: #1c2a2d;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #17140f;
+  --bg-elevated: #221e18;
+  --text: #f3efe7;
+  --text-muted: #c7bfb2;
+  --accent: #d8a978;
+  --accent-contrast: #1c1006;
+  --border: #3c352a;
+  --focus-ring: #7cb0f0;
+  --danger: #e5897a;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --leader-bg: #332a1d;
+  --all-bg: #1c2a2d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Noto Serif", serif;
+  font-size: calc(17px * var(--font-scale));
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+a { color: var(--accent); }
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.65em 1.1em;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+button:hover { filter: brightness(0.97); }
+:root[data-theme="dark"] button:hover,
+:root:not([data-theme="light"]) button:hover {
+  @media (prefers-color-scheme: dark) { filter: brightness(1.15); }
+}
+
+button:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+button.primary {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+button.ghost {
+  background: transparent;
+  box-shadow: none;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+button.small {
+  padding: 0.4em 0.75em;
+  font-size: 0.85em;
+}
+
+fieldset {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin: 0 0 1.25rem;
+  padding: 1rem;
+}
+
+legend {
+  padding: 0 0.4em;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+label.option-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5em 0;
+}
+
+select {
+  font: inherit;
+  background: var(--bg-elevated);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4em 0.6em;
+}
+
+/* ---------- App chrome ---------- */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.app-header h1 {
+  font-size: 1.15rem;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.app-nav {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.app-nav a {
+  text-decoration: none;
+  color: var(--text-muted);
+  padding: 0.4em 0.7em;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.app-nav a[aria-current="page"] {
+  background: var(--leader-bg);
+  color: var(--text);
+  font-weight: 600;
+}
+
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.screen-title {
+  margin: 0 0 0.25rem;
+  font-size: 1.6rem;
+}
+
+.subtle {
+  color: var(--text-muted);
+}
+
+/* ---------- Home screen ---------- */
+.today-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin: 1rem 0;
+  box-shadow: var(--shadow);
+}
+
+.today-card .set-name {
+  font-size: 1.5rem;
+  margin: 0.15em 0;
+}
+
+.set-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0 1.25rem;
+}
+
+.set-picker button[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border-color: var(--accent);
+}
+
+.resume-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  background: var(--leader-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.cta-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.link-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.link-list a {
+  display: block;
+  text-decoration: none;
+  color: var(--text);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+}
+
+/* ---------- Prayer step screen ---------- */
+.pray-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.pray-progress {
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.pray-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1.5rem 3rem;
+  gap: 1.25rem;
+  max-width: 760px;
+  margin: 0 auto;
+  width: 100%;
+  cursor: pointer;
+}
+
+#main-content:focus-visible {
+  outline: none;
+}
+
+.mystery-chip {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.prayer-title {
+  font-size: calc(2.1rem * var(--font-scale, 1) / var(--font-scale, 1));
+  font-size: 2.1rem;
+  margin: 0;
+}
+
+.prayer-text {
+  font-size: 1.5rem;
+  line-height: 1.65;
+  max-width: 46ch;
+}
+
+.prayer-text p {
+  margin: 0 0 0.6em;
+}
+
+.prayer-text .leader-line {
+  background: var(--leader-bg);
+}
+.prayer-text .all-line {
+  background: var(--all-bg);
+}
+.prayer-text .leader-line,
+.prayer-text .all-line {
+  border-radius: 6px;
+  padding: 0.05em 0.35em;
+  display: inline;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.call-response-label {
+  font-size: 0.75em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  display: block;
+  margin: 0.9em 0 0.15em;
+}
+
+.mystery-announce .mystery-title {
+  font-size: 2.2rem;
+  margin: 0.1em 0;
+}
+
+.mystery-announce .scripture {
+  font-size: 1.25rem;
+  font-style: italic;
+  max-width: 50ch;
+}
+
+.mystery-announce .fruit {
+  color: var(--text-muted);
+}
+
+.beads-only .prayer-title {
+  font-size: 1.4rem;
+  color: var(--text-muted);
+}
+
+.bead-dot {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-contrast);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.pray-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem 1.75rem;
+}
+
+.pray-controls button {
+  min-width: 6.5rem;
+  padding: 0.85em 1.1em;
+  font-size: 1.05rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.complete-banner {
+  background: var(--leader-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+/* ---------- Mystery reference ---------- */
+.mystery-set-section h2 {
+  margin: 1.75rem 0 0.5rem;
+  font-size: 1.3rem;
+}
+
+.mystery-entry {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.mystery-entry h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1.1rem;
+}
+
+.mystery-entry .ref {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.mystery-entry .scripture-text {
+  font-style: italic;
+  margin: 0.5rem 0;
+}
+
+/* ---------- History ---------- */
+.stat-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 1rem 0 1.5rem;
+}
+
+.stat-tile {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.5rem;
+  text-align: center;
+  min-width: 8rem;
+}
+
+.stat-tile .value {
+  font-size: 2rem;
+  font-weight: 700;
+  display: block;
+}
+
+.stat-tile .label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.history-list li {
+  display: flex;
+  justify-content: space-between;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+}
+
+.empty-state {
+  color: var(--text-muted);
+  font-style: italic;
+}
