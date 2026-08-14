@@ -281,14 +281,14 @@ function renderPrayer(
   if (!prayer) return h("div", {});
   const title = h("h2", { class: "prayer-title" }, [prayer.title]);
 
-  const hidden = settings.beadsOnlyMode || settings.hiddenPrayers.includes(bead.type as HideablePrayer);
-  if (hidden) {
-    return h("div", {}, [title]);
-  }
-
   const children: HTMLElement[] = [title];
   if (bead.type === "hailMary" && bead.count) {
     children.push(h("p", { class: "subtle repeat-count" }, [`Pray ${bead.count} times`]));
+  }
+
+  const hidden = settings.beadsOnlyMode || settings.hiddenPrayers.includes(bead.type as HideablePrayer);
+  if (hidden) {
+    return h("div", {}, children);
   }
 
   const textEl = h("div", { class: "prayer-text" }, [h("p", {}, [prayer.lines.join("\n")])]);

@@ -70,7 +70,7 @@ export interface ProgressLabel {
   detailLabel: string;
 }
 
-/** Human-readable progress text, e.g. "Decade 3 - Hail Mary x10". */
+/** Human-readable progress text, e.g. "Decade 3 · Hail Mary · 10 times". */
 export function describeProgress(bead: Bead, mysterySet: MysterySetName): ProgressLabel {
   if (bead.decade === 0) {
     return { decadeLabel: "Opening", detailLabel: openingDetail(bead) };
@@ -78,7 +78,7 @@ export function describeProgress(bead: Bead, mysterySet: MysterySetName): Progre
   if (bead.decade === 6) {
     return { decadeLabel: "Closing", detailLabel: closingDetail(bead) };
   }
-  const decadeLabel = `${mysterySet} Mysteries - Decade ${bead.decade} of 5`;
+  const decadeLabel = `${mysterySet} Mysteries · Decade ${bead.decade} of 5`;
   return { decadeLabel, detailLabel: decadeDetail(bead) };
 }
 
@@ -91,7 +91,7 @@ function openingDetail(bead: Bead): string {
     case "ourFather":
       return "Our Father";
     case "hailMary":
-      return `Hail Mary x${bead.count}`;
+      return `Hail Mary · ${bead.count} times`;
     case "gloryBe":
       return "Glory Be";
     default:
@@ -106,7 +106,7 @@ function decadeDetail(bead: Bead): string {
     case "ourFather":
       return "Our Father";
     case "hailMary":
-      return `Hail Mary x${bead.count}`;
+      return `Hail Mary · ${bead.count} times`;
     case "gloryBe":
       return "Glory Be";
     case "fatima":
