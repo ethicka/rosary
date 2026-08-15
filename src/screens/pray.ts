@@ -130,7 +130,7 @@ export function mountPray(container: HTMLElement): () => void {
         "div",
         { class: "pray-progress" },
         [...splitOnDot(progress.decadeLabel), ...splitOnDot(progress.detailLabel)].map((line) =>
-          h("div", {}, [line]),
+          h("div", { class: /\stimes$/.test(line) ? "pray-progress-count" : undefined }, [line]),
         ),
       ),
       h("div", { class: "pray-header-spacer" }),

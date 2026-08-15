@@ -620,6 +620,9 @@ main {
   .mystery-announce .scripture {
     font-size: 1rem;
   }
+  .pray-progress-count {
+    display: none;
+  }
 }
 
 .bead-dot {
