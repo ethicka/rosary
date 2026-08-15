@@ -65,8 +65,22 @@ body {
 
 #app {
   min-height: 100vh;
+  /* Accounts for mobile browser chrome (address bar) that 100vh doesn't;
+     falls back to the line above in browsers without dvh support. */
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
+}
+
+/* Non-Prayer screens (the Prayer screen manages its own fixed-position
+   layout) stretch to fill #app so `main { flex: 1 }` below can push a
+   short page's footer down to the bottom of the viewport instead of it
+   trailing right after sparse content. */
+.screen:not(.screen-pray) {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
