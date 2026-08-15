@@ -60,18 +60,21 @@ export function renderShell(container: HTMLElement, active: RouteName, content: 
 function renderFooter(): HTMLElement {
   return h("footer", { class: "app-footer" }, [
     h("p", {}, [
-      "Prayer texts and Scripture readings are copied from the USCCB: ",
-      h("a", { href: "https://www.usccb.org/how-to-pray-the-rosary", target: "_blank", rel: "noopener noreferrer" }, [
-        "How to Pray the Rosary",
-      ]),
-      " and ",
-      h("a", { href: "https://www.usccb.org/prayers/prayers-rosary", target: "_blank", rel: "noopener noreferrer" }, [
-        "Prayers of the Rosary",
-      ]),
-      ".",
+      "Project by William Donahoe · ",
+      h("a", { href: "https://github.com/ethicka", target: "_blank", rel: "noopener noreferrer" }, ["GitHub"]),
     ]),
     h("p", {}, [
-      "No account, no ads. Your Rosary progress and settings stay on your device; anonymous, cookie-free page-view analytics (Vercel Analytics and Fathom) help us see how the app is used.",
+      h(
+        "a",
+        {
+          href: "#/about",
+          onclick: (e: Event) => {
+            e.preventDefault();
+            navigate("about");
+          },
+        },
+        ["About this site"],
+      ),
     ]),
   ]);
 }

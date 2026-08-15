@@ -2,10 +2,11 @@ import type { MysterySetName } from "../data/mysteries.ts";
 
 export interface RosarySession {
   mysterySet: MysterySetName;
-  /** Current index into the bead sequence generated from includeFatima/includeStJoseph below. */
+  /** Current index into the bead sequence generated from the options below. */
   index: number;
   includeFatima: boolean;
   includeStJoseph: boolean;
+  skipDecadePrayers: boolean;
   startedAt: string;
 }
 

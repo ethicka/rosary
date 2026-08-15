@@ -26,6 +26,11 @@ export interface Bead {
 export interface BeadSequenceOptions {
   includeFatima: boolean;
   includeStJoseph: boolean;
+  /** Skip the Our Father/Hail Marys/Glory Be/Fatima within each decade,
+   * keeping only the Mystery announcements — for those who already know
+   * those prayers and just want the Mysteries referenced. The opening and
+   * closing prayers are unaffected. */
+  skipDecadePrayers?: boolean;
 }
 
 /** Builds the flat, precomputed array of "beads" that drives the whole Rosary
@@ -45,11 +50,13 @@ export function buildBeadSequence(options: BeadSequenceOptions): Bead[] {
   for (let decade = 1; decade <= 5; decade++) {
     const mysteryIndex = decade - 1;
     beads.push({ type: "mysteryAnnounce", decade, mysteryIndex });
-    beads.push({ type: "ourFather", decade, mysteryIndex });
-    beads.push({ type: "hailMary", decade, count: 10, mysteryIndex });
-    beads.push({ type: "gloryBe", decade, mysteryIndex });
-    if (options.includeFatima) {
-      beads.push({ type: "fatima", decade, mysteryIndex });
+    if (!options.skipDecadePrayers) {
+      beads.push({ type: "ourFather", decade, mysteryIndex });
+      beads.push({ type: "hailMary", decade, count: 10, mysteryIndex });
+      beads.push({ type: "gloryBe", decade, mysteryIndex });
+      if (options.includeFatima) {
+        beads.push({ type: "fatima", decade, mysteryIndex });
+      }
     }
   }
 

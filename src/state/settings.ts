@@ -12,6 +12,7 @@ export interface Settings {
   includeFatima: boolean;
   includeStJoseph: boolean;
   beadsOnlyMode: boolean;
+  skipDecadePrayers: boolean;
   hiddenPrayers: HideablePrayer[];
   language: "en";
 }
@@ -24,6 +25,7 @@ export const DEFAULT_SETTINGS: Settings = {
   includeFatima: true,
   includeStJoseph: false,
   beadsOnlyMode: false,
+  skipDecadePrayers: false,
   hiddenPrayers: [],
   language: "en",
 };

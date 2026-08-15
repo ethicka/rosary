@@ -22,6 +22,7 @@ export function mountPray(container: HTMLElement): () => void {
   const sequence = buildBeadSequence({
     includeFatima: session.includeFatima,
     includeStJoseph: session.includeStJoseph,
+    skipDecadePrayers: session.skipDecadePrayers,
   });
 
   let index = Math.min(session.index, sequence.length - 1);

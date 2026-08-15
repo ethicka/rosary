@@ -31,6 +31,7 @@ export function mountHome(container: HTMLElement): void {
       const sequence = buildBeadSequence({
         includeFatima: existingSession.includeFatima,
         includeStJoseph: existingSession.includeStJoseph,
+        skipDecadePrayers: existingSession.skipDecadePrayers,
       });
       const notFinished = existingSession.index < sequence.length - 1;
       if (notFinished) {
@@ -137,6 +138,7 @@ export function mountHome(container: HTMLElement): void {
       index: 0,
       includeFatima: settings.includeFatima,
       includeStJoseph: settings.includeStJoseph,
+      skipDecadePrayers: settings.skipDecadePrayers,
       startedAt: new Date().toISOString(),
     });
     navigate("pray");

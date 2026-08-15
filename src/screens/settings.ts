@@ -72,6 +72,11 @@ export function mountSettings(container: HTMLElement): void {
           [toggle(settings.beadsOnlyMode, (v) => update("beadsOnlyMode", v))],
           "Hide all prayer text and show only a minimal bead counter, for silent prayer from memory.",
         ),
+        row(
+          "Skip prayers between Mysteries",
+          [toggle(settings.skipDecadePrayers, (v) => update("skipDecadePrayers", v))],
+          "Step through just the five Mysteries, skipping the Our Father, Hail Marys, and Glory Be of each decade — for when you already know them by heart. Opening and closing prayers are unaffected.",
+        ),
       ]),
 
       h("fieldset", {}, [
