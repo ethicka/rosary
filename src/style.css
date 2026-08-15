@@ -563,7 +563,6 @@ main {
 }
 
 .prayer-title {
-  font-size: calc(2.1rem * var(--font-scale, 1) / var(--font-scale, 1));
   font-size: 2.1rem;
   margin: 0;
 }
@@ -597,6 +596,30 @@ main {
 .beads-only .prayer-title {
   font-size: 1.4rem;
   color: var(--text-muted);
+}
+
+/* Smaller by default on mobile so a full prayer has a better chance of
+   fitting in view without scrolling. */
+@media (max-width: 680px) {
+  .pray-main {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+  .pray-main-inner {
+    gap: 0.85rem;
+  }
+  .prayer-title {
+    font-size: 1.6rem;
+  }
+  .prayer-text {
+    font-size: 1.05rem;
+    line-height: 1.45;
+  }
+  .mystery-announce .mystery-title {
+    font-size: 1.7rem;
+  }
+  .mystery-announce .scripture {
+    font-size: 1rem;
+  }
 }
 
 .bead-dot {
