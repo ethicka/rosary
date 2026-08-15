@@ -11,7 +11,7 @@ export interface PrayerText {
 
 export const en = {
   meta: {
-    appName: "Rosary",
+    appName: "The Holy Rosary",
   },
   prayers: {
     signOfCross: {

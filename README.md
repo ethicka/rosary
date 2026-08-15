@@ -1,4 +1,4 @@
-# Rosary
+# The Holy Rosary
 
 A single-page, offline-first web app that walks you through praying the Rosary — the correct prayer text, the correct Mystery for the day, a short Scripture reading per Mystery, and nothing else. No account, no ads, no gamification.
 

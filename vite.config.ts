@@ -7,9 +7,9 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.png", "icons/icon.svg"],
       manifest: {
-        name: "Rosary",
-        short_name: "Rosary",
-        description: "A bead-by-bead guide to praying the Rosary, offline and distraction-free.",
+        name: "The Holy Rosary",
+        short_name: "Holy Rosary",
+        description: "A bead-by-bead guide to praying the Holy Rosary, offline and distraction-free.",
         start_url: "/",
         scope: "/",
         display: "standalone",

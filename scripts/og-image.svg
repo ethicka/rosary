@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#1e3f78"/>
+  <g transform="translate(120,145) scale(5.9)" fill="#f4f7fc">
+    <path d="M33.317,39.442l-4.222,2.422l-2.436-4.292L22.337,40l2.436,4.292l-4.272,2.425l2.425,4.272 l4.272-2.425l4.774,8.41c0.377,0.664,1.221,0.897,1.885,0.52l1.901-1.079c0.666-0.378,0.898-1.226,0.517-1.89l-4.805-8.385 l4.272-2.425L33.317,39.442z"/>
+    <circle cx="24.337" cy="3" r="3"/>
+    <circle cx="33.337" cy="4" r="3"/>
+    <circle cx="42.337" cy="6" r="3"/>
+    <circle cx="47.337" cy="13" r="3"/>
+    <circle cx="44.337" cy="21" r="3"/>
+    <circle cx="37.337" cy="27" r="3"/>
+    <circle cx="30.337" cy="33" r="3"/>
+    <circle cx="16.337" cy="6" r="3"/>
+    <circle cx="11.337" cy="13" r="3"/>
+    <circle cx="10.337" cy="22" r="3"/>
+    <circle cx="12.337" cy="31" r="3"/>
+    <circle cx="16.337" cy="39" r="3"/>
+  </g>
+  <text x="470" y="345" font-family="Georgia, 'Times New Roman', serif" font-size="92" font-weight="700" fill="#f4f7fc">The Holy Rosary</text>
+  <text x="470" y="400" font-family="Georgia, 'Times New Roman', serif" font-size="34" fill="#a9bede">A bead-by-bead guide to praying the Rosary</text>
+</svg>
