@@ -126,10 +126,13 @@ export function mountPray(container: HTMLElement): () => void {
         },
         [],
       ),
-      h("div", { class: "pray-progress" }, [
-        h("div", {}, [progress.decadeLabel]),
-        h("div", {}, [progress.detailLabel]),
-      ]),
+      h(
+        "div",
+        { class: "pray-progress" },
+        [...splitOnDot(progress.decadeLabel), ...splitOnDot(progress.detailLabel)].map((line) =>
+          h("div", {}, [line]),
+        ),
+      ),
       h("div", { class: "pray-header-spacer" }),
     ]);
 
@@ -142,8 +145,8 @@ export function mountPray(container: HTMLElement): () => void {
       if (subheaderMystery) {
         elements.push(
           h("div", { class: "pray-subheader" }, [
-            h("strong", {}, [`Decade ${bead.decade}: ${subheaderMystery.title}`]),
-            h("span", { class: "subtle" }, [` · Fruit: ${subheaderMystery.fruit}`]),
+            h("div", {}, [h("strong", {}, [`Decade ${bead.decade}: ${subheaderMystery.title}`])]),
+            h("div", { class: "subtle" }, [`Fruit: ${subheaderMystery.fruit}`]),
           ]),
         );
       }
@@ -220,6 +223,13 @@ export function mountPray(container: HTMLElement): () => void {
   return () => {
     document.removeEventListener("keydown", onKeydown);
   };
+}
+
+/** Splits a "·"-joined progress label into separate lines, so header text
+ * always breaks at that natural clause boundary instead of wherever the
+ * browser finds room (which can overlap on narrow screens). */
+function splitOnDot(text: string): string[] {
+  return text.split(" · ");
 }
 
 function renderSidebar(bead: Bead, mysterySet: MysterySetName): HTMLElement {

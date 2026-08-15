@@ -452,6 +452,12 @@ main {
   .decade-item {
     padding: 0.15rem;
   }
+  /* Only the circular badge shows active/done state here — the
+     rectangular tinted pill from desktop looks like a stray box behind
+     a circle once the label text next to it is hidden. */
+  .decade-item.decade-active {
+    background: none;
+  }
   .decade-name {
     display: none;
   }
