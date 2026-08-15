@@ -601,7 +601,7 @@ main {
 }
 
 .repeat-count {
-  margin-top: -0.75rem;
+  margin-top: 0.5rem;
 }
 
 #main-content:focus-visible {
@@ -754,10 +754,16 @@ main {
 /* ---------- Mystery reference ---------- */
 .mystery-set-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-top: 1.25rem;
-  max-width: 60rem;
+  max-width: 40rem;
+}
+
+@media (max-width: 680px) {
+  .mystery-set-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .mystery-set-card {
@@ -768,7 +774,6 @@ main {
   text-align: left;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
-  border-top: 3px solid var(--accent);
   border-radius: var(--radius);
   padding: 1.25rem 1.4rem;
   box-shadow: var(--shadow);
@@ -793,9 +798,6 @@ main {
   flex-shrink: 0;
 }
 
-.back-link {
-  margin-bottom: 1rem;
-}
 
 .mystery-entry {
   background: var(--bg-elevated);

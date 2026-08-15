@@ -52,17 +52,6 @@ export function mountMysteries(container: HTMLElement): void {
 
   function renderDetail(set: MysterySetName): HTMLElement {
     return h("div", {}, [
-      h(
-        "button",
-        {
-          class: "ghost small back-link",
-          onclick: () => {
-            selectedSet = null;
-            redraw();
-          },
-        },
-        ["← All Mysteries"],
-      ),
       h("h2", { class: "screen-title" }, [`${set} Mysteries`]),
       h("p", { class: "subtle", style: "margin-bottom: 1.25rem;" }, [MYSTERY_SET_TAGLINE[set]]),
       ...getMysterySet(set).map((m) =>
