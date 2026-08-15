@@ -1,6 +1,6 @@
 import { h } from "./dom.ts";
 import { navigate, type RouteName } from "./router.ts";
-import { CROSS_MARK_SVG } from "./icon.ts";
+import { ROSARY_MARK_SVG } from "./icon.ts";
 
 const NAV_ITEMS: { route: RouteName; label: string }[] = [
   { route: "home", label: "Home" },
@@ -40,7 +40,7 @@ export function renderShell(container: HTMLElement, active: RouteName, content: 
             navigate("home");
           },
         },
-        [h("span", { class: "logo-mark", html: CROSS_MARK_SVG }), "Rosary"],
+        [h("span", { class: "logo-mark", html: ROSARY_MARK_SVG }), "Rosary"],
       ),
     ]),
     nav,
